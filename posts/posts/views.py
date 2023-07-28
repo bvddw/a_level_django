@@ -1,4 +1,4 @@
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, Http404
 
 
 def main_page(request: HttpRequest) -> HttpResponse:
@@ -67,3 +67,10 @@ def subscribe_topic(request: HttpRequest, topic) -> HttpResponse:
 
 def unsubscribe_topic(request: HttpRequest, topic) -> HttpResponse:
     return HttpResponse(f'A submission for unsubscribing to a topic {topic}.')
+
+
+def archive(request: HttpRequest, year: str, month: str) -> HttpResponse:
+    if int(year) > 2023 or int(year) < 2020 or int(month) not in range(1, 13):
+        raise Http404('No data about this data.')
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    return HttpResponse(f'Archive. Year: {year}, month: {months[int(month) - 1]}.')
