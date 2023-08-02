@@ -10,10 +10,16 @@ UserModel = get_user_model()
 class Topic(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(max_length=255)
-    user = models.ManyToManyField(UserModel, related_name='preferred_topics', blank=True)
 
     def __str__(self):
         return self.title
+
+
+class UserTopic(models.Model):
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    prefer = models.BooleanField(default=False)
+    notify = models.BooleanField(default=False)
 
 
 class Article(models.Model):
