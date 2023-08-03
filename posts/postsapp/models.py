@@ -18,7 +18,6 @@ class Topic(models.Model):
 class UserTopic(models.Model):
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
-    prefer = models.BooleanField(default=False)
     notify = models.BooleanField(default=False)
 
 
