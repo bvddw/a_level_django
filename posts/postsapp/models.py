@@ -7,7 +7,7 @@ UserModel = get_user_model()
 
 
 class Topic(models.Model):
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=64, unique=True)
     description = models.TextField(max_length=255)
     users = models.ManyToManyField(UserModel, through='UserTopic')
 
