@@ -1,36 +1,26 @@
 from postsapp.models import Article, UserTopic
 from django.contrib.auth import get_user_model
+from django.db.models import Count, Q
 
 UserModel = get_user_model()
 
 
 def get_sorted_articles(user_id):
     """
-    We will display a list of articles. All of them are preferred by user. Articles, that user want to see in
-    notification has more priority, so first items in list - articles with field notify == True, then also preferred
-    articles, but field notify == False.
+    We will display a list of articles. If user has preferred articles, we will show relevant articles to them. If
+    no, will show just 3 random articles. The more the article has topics that the user prefers, the more preferable
+    it is for him, so ordering by amount preferred topics in article.
     """
     try:
         user = UserModel.objects.get(id=user_id)
     except UserModel.DoesNotExist:
         return None
 
-    # take only preferred topics by current user with field notify == True
-    notified_topics = UserTopic.objects.filter(user=user, notify=True).values_list('topic__title', flat=True)
-    # take only articles, that connected to notified topics
-    articles = Article.objects.filter(topics__title__in=notified_topics)
-    # then take only their title for display
-    articles_titles = [article.title for article in articles]
-
-    # take only preferred topics by current user with field notify == False and append then to first part of articles
-    preferred_topics = UserTopic.objects.filter(user=user, notify=False).values_list('topic__title', flat=True)
+    # take only preferred topics by current user
+    preferred_topics = UserTopic.objects.filter(user=user).values_list('topic__title', flat=True)
     # take only articles, that connected to preferred topics
-    articles = Article.objects.filter(topics__title__in=preferred_topics)
-    # then take only their title for display
-    preferred_articles = [article.title for article in articles]
-
-    for article_title in preferred_articles:
-        if article_title not in articles_titles:
-            articles_titles.append(article_title)
-
+    articles_titles = Article.objects.all().annotate(number_of_topics=Count('topics', filter=Q(topics__title__in=preferred_topics)))
+    # let's display only three first relevant topics for each user. Even if user has not preferred topics, we will show
+    # just 3 different articles, for his/her attention.
+    articles_titles = articles_titles.order_by('number_of_topics').values_list('title', flat=True)[:3]
     return articles_titles
