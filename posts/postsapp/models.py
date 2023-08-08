@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
-from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 # Create your models here.
@@ -8,7 +7,7 @@ UserModel = get_user_model()
 
 
 class Topic(models.Model):
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=64, unique=True)
     description = models.TextField(max_length=255)
     users = models.ManyToManyField(UserModel, through='UserTopic')
 
@@ -23,11 +22,11 @@ class UserTopic(models.Model):
 
 
 class Article(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
     content = models.TextField(validators=[MinLengthValidator(255)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    topic = models.ManyToManyField(Topic)
+    topics = models.ManyToManyField(Topic)
     author = models.ForeignKey(UserModel, on_delete=models.CASCADE)
 
     def __str__(self):
