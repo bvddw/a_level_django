@@ -33,7 +33,7 @@ class Article(models.Model):
     slug = models.SlugField(unique=True, editable=False, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(f"{self.title} {timezone.now().strftime('%Y-%d-%m')}")
+        self.slug = slugify(f"{self.title[:36]} {timezone.now().strftime('%Y-%d-%m')}")
         super(Article, self).save(*args, **kwargs)
 
 
