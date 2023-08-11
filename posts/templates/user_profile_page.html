@@ -12,14 +12,14 @@
     {% endif %}
     <ul>
       {% for article in users_articles %}
-        <li><a style="color: black; text-decoration: none" href="{% url 'one_article' article_title=article.title %}">{{ article.title }}</a></li>
+        <li><a style="color: black; text-decoration: none" href="{% url 'one_article' article_slug=article.slug %}">{{ article.title }}</a></li>
       {% endfor %}
     </ul>
     {% if recommendation %}
       <p style="margin-bottom: 0; font-style: italic; font-size: 20px">Recommended articles for you:</p>
       <ul>
         {% for article in recommendation %}
-          <li><a style="color: black; text-decoration: none" href="{% url 'one_article' article_title=article.title %}">{{ article.title }}</a></li>
+          <li><a style="color: black; text-decoration: none" href="{% url 'one_article' article_slug=article.slug %}">{{ article.title }}</a></li>
         {% endfor %}
       </ul>
 

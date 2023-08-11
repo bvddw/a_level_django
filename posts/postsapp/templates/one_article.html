@@ -20,8 +20,8 @@
     <p style="text-align: end; color: rgba(0, 0, 0, 0.48)">Last update at: {{ article.updated_at }}</p>
 
     <div style="text-align: end">
-      <a style="margin-left: 6px; color: black; text-decoration: none" href="{% url 'upd_article' article_title=article.title %}">Update</a>
-      <a style="margin-left: 6px; color: black; text-decoration: none" href="{% url 'del_article' article_title=article.title %}">Delete</a>
+      <a style="margin-left: 6px; color: black; text-decoration: none" href="{% url 'upd_article' article_slug=article.slug %}">Update</a>
+      <a style="margin-left: 6px; color: black; text-decoration: none" href="{% url 'del_article' article_slug=article.slug %}">Delete</a>
     </div>
 
     {% if comments %}

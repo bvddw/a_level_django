@@ -20,9 +20,9 @@ from . import views
 
 urlpatterns = [
     path('create/', views.create_article, name='create_article'),
-    path('<article_title>/', views.article, name='one_article'),
-    path('<article_title>/comments/', views.article_comment, name='comments_to_article'),
-    path('<article_title>/update/', views.update_article, name='upd_article'),
-    path('<article_title>/delete/', views.delete_article, name='del_article'),
+    path('<slug:article_slug>/', views.article, name='one_article'),
+    path('<slug:article_slug>/comments/', views.article_comment, name='comments_to_article'),
+    path('<slug:article_slug>/update/', views.update_article, name='upd_article'),
+    path('<slug:article_slug>/delete/', views.delete_article, name='del_article'),
 
 ]

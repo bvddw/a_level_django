@@ -22,7 +22,7 @@ def get_sorted_articles(user_id):
     articles_titles = Article.objects.all().annotate(number_of_topics=Count('topics', filter=Q(topics__title__in=preferred_topics)))
     # let's display only three first relevant topics for each user. Even if user has not preferred topics, we will show
     # just 3 different articles, for his/her attention.
-    articles_titles = articles_titles.order_by('number_of_topics').values_list('title', flat=True)[:3]
+    articles_titles = articles_titles.order_by('number_of_topics')[:3]
     return articles_titles
 
 

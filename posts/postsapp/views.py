@@ -3,12 +3,12 @@ from django.shortcuts import render
 from postsapp.models import Article, Comment, Topic
 
 
-def article(request: HttpRequest, article_title) -> HttpResponse:
+def article(request: HttpRequest, article_slug) -> HttpResponse:
     # display only article content, comments on page /article_title/comments
     try:
         ctx = {
-            'article': Article.objects.get(title=article_title),
-            'comments': Comment.objects.filter(article=Article.objects.get(title=article_title)),
+            'article': Article.objects.get(slug=article_slug),
+            'comments': Comment.objects.filter(article=Article.objects.get(slug=article_slug)),
             'topics': Topic.objects.all(),
         }
         return render(request, 'one_article.html', ctx)
@@ -16,10 +16,10 @@ def article(request: HttpRequest, article_title) -> HttpResponse:
         raise Http404('There no such article.')
 
 
-def article_comment(request: HttpRequest, article_title) -> HttpResponse:
+def article_comment(request: HttpRequest, article_slug) -> HttpResponse:
     # display article + comment to it
     try:
-        cur_article = Article.objects.get(title=article_title)
+        cur_article = Article.objects.get(slug=article_slug)
         comments = Comment.objects.filter(article=cur_article)
         comments_text = ''
         for index, comment in enumerate(comments):
@@ -33,9 +33,9 @@ def article_comment(request: HttpRequest, article_title) -> HttpResponse:
         raise Http404('There no such article.')
 
 
-def update_article(request: HttpRequest, article_title) -> HttpResponse:
+def update_article(request: HttpRequest, article_slug) -> HttpResponse:
     try:
-        cur_article = Article.objects.get(title=article_title)
+        cur_article = Article.objects.get(slug=article_slug)
         topics = Topic.objects.all()
         topics_to_ctx = []
         for index, topic in enumerate(topics):
@@ -51,9 +51,9 @@ def update_article(request: HttpRequest, article_title) -> HttpResponse:
         raise Http404('No articles with such title.')
 
 
-def delete_article(request: HttpRequest, article_title) -> HttpResponse:
+def delete_article(request: HttpRequest, article_slug) -> HttpResponse:
     try:
-        cur_article = Article.objects.get(title=article_title)
+        cur_article = Article.objects.get(slug=article_slug)
         ctx = {'article': cur_article}
         return render(request, 'del_article.html', ctx)
     except Article.DoesNotExist:
