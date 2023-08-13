@@ -30,7 +30,7 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     topics = models.ManyToManyField(Topic)
     author = models.ForeignKey(UserModel, on_delete=models.CASCADE)
-    slug = models.SlugField(unique=True, editable=False, null=True, blank=True)
+    slug = models.SlugField(unique=True, editable=False)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(f"{self.title[:36]} {timezone.now().strftime('%Y-%d-%m')}")
