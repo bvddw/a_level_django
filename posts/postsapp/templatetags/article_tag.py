@@ -1,7 +1,6 @@
 from django import template
 from django.db.models import Count
-from postsapp.services import get_sorted_articles
-from ..models import Article, Topic
+from ..models import Article
 
 register = template.Library()
 
