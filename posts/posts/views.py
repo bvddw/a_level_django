@@ -1,7 +1,6 @@
 from django.db.models import Count
-from django.http import HttpRequest, HttpResponse, Http404
+from django.http import HttpRequest, HttpResponse
 from postsapp.models import Article, Comment, Topic, UserTopic
-from postsapp.services import get_sorted_articles, get_sorted_topics
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
 
