@@ -17,7 +17,7 @@ def article(request: HttpRequest, article_slug) -> HttpResponse:
 def update_article(request: HttpRequest, article_slug) -> HttpResponse:
     try:
         cur_article = Article.objects.get(slug=article_slug)
-        # this part will be changed after forms are added
+        # this part will be changed after forms are added, for now it's need for correct view for upd form on site
         topics = Topic.objects.all()
         topics_to_ctx = []
         for index, topic in enumerate(topics):
@@ -42,7 +42,7 @@ def delete_article(request: HttpRequest, article_slug) -> HttpResponse:
 
 
 def create_article(request: HttpRequest) -> HttpResponse:
-    # this part will be changed after forms are added
+    # this part will be changed after forms are added, for now it's need for correct view for upd form on site
     topics = Topic.objects.all()
     topics_to_ctx = []
     for index, topic in enumerate(topics):
