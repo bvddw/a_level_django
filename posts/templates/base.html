@@ -52,7 +52,7 @@
   </div>
   <div class="nav-scroller py-1">
     <nav class="nav d-flex justify-content-between">
-      {% for topic in all_topics_to_display %}
+      {% for topic in topics %}
         <a href="{% url 'one_topic' topic_title=topic.title %}" class="nav-item nav-link link-body-emphasis">{{ topic.title }}</a>
       {% endfor %}
     </nav>

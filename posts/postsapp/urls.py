@@ -19,10 +19,11 @@ from . import views
 
 
 urlpatterns = [
-    path('create/', views.create_article, name='create_article'),
-    path('<slug:article_slug>/', views.article, name='one_article'),
-    path('<slug:article_slug>/comments/', views.article_comment, name='comments_to_article'),
-    path('<slug:article_slug>/update/', views.update_article, name='upd_article'),
-    path('<slug:article_slug>/delete/', views.delete_article, name='del_article'),
-
+    path('profile/<username>/', views.profile, name='profile_page'),
+    path('set-password/<username>/', views.set_password, name='set_password'),
+    path('set-userdata/<username>/', views.set_userdata, name='set_data'),
+    path('deactivate/', views.deactivate, name='deactivate'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
 ]

@@ -5,3 +5,4 @@ __pycache__/
 .idea/
 venv/
 posts/db.sqlite3
+posts/postsapp/email_settings.py

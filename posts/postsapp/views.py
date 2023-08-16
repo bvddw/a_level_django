@@ -1,73 +1,60 @@
 from django.http import HttpRequest, HttpResponse, Http404
+from postsapp.models import Article, Comment, Topic, UserTopic
+from postsapp.services import get_sorted_articles, get_sorted_topics
+from django.contrib.auth import get_user_model
 from django.shortcuts import render
-from postsapp.models import Article, Comment, Topic
+
+UserModel = get_user_model()
 
 
-def article(request: HttpRequest, article_slug) -> HttpResponse:
-    # display only article content, comments on page /article_title/comments
+def profile(request: HttpRequest, username) -> HttpResponse:
     try:
+        cur_user = UserModel.objects.get(username=username)
+        articles = Article.objects.filter(author=cur_user)
+        articles_on_preferred_topics = get_sorted_articles(cur_user.id)
+        sorted_topics = get_sorted_topics(cur_user)
+
         ctx = {
-            'article': Article.objects.get(slug=article_slug),
-            'comments': Comment.objects.filter(article=Article.objects.get(slug=article_slug)),
-            'topics': Topic.objects.all(),
+            'user': cur_user,
+            'users_articles': articles,
+            'recommendation': articles_on_preferred_topics,
+            'ordered_topics': sorted_topics,
         }
-        return render(request, 'one_article.html', ctx)
-    except Article.DoesNotExist:
-        raise Http404('There no such article.')
+
+        return render(request, 'user_profile_page.html', ctx)
+    except UserModel.DoesNotExist:
+        raise Http404('There is no such user.')
 
 
-def article_comment(request: HttpRequest, article_slug) -> HttpResponse:
-    # display article + comment to it
+def set_password(request: HttpRequest, username) -> HttpResponse:
     try:
-        cur_article = Article.objects.get(slug=article_slug)
-        comments = Comment.objects.filter(article=cur_article)
-        comments_text = ''
-        for index, comment in enumerate(comments):
-            comments_text += str(index + 1) + ') ' + comment.author.username + ': ' + comment.message + '\n'
-        if comments_text == '':
-            comments_text = 'There no comments yet.'
-        return HttpResponse(
-            f'AUTHOR: {cur_article.author.username}\n\nTITLE: {cur_article.title}\n\nCONTENT: {cur_article.content}\n\nCOMMENTS:\n{comments_text}',
-            content_type='text/plain')
-    except Article.DoesNotExist:
-        raise Http404('There no such article.')
+        user = UserModel.objects.get(username=username)
+        ctx = {'user': user}
+        return render(request, 'set_password.html', ctx)
+    except UserModel.DoesNotExist:
+        raise Http404('User with this password does not exist.')
 
 
-def update_article(request: HttpRequest, article_slug) -> HttpResponse:
+def set_userdata(request: HttpRequest, username) -> HttpResponse:
     try:
-        cur_article = Article.objects.get(slug=article_slug)
-        topics = Topic.objects.all()
-        topics_to_ctx = []
-        for index, topic in enumerate(topics):
-            cur_topic = {'option_value': index + 1, 'topic': topic}
-            topics_to_ctx.append(cur_topic)
-        ctx = {
-            'article': cur_article,
-            'topics_list': topics_to_ctx,
-            'topics': Topic.objects.all(),
-        }
-        return render(request, 'upd_article.html', ctx)
-    except Article.DoesNotExist:
-        raise Http404('No articles with such title.')
+        user = UserModel.objects.get(username=username)
+        ctx = {'user': user}
+        return render(request, 'set_data.html', ctx)
+    except UserModel.DoesNotExist:
+        raise Http404('User with this password does not exist.')
 
 
-def delete_article(request: HttpRequest, article_slug) -> HttpResponse:
-    try:
-        cur_article = Article.objects.get(slug=article_slug)
-        ctx = {'article': cur_article}
-        return render(request, 'del_article.html', ctx)
-    except Article.DoesNotExist:
-        raise Http404('No articles with such title.')
+def deactivate(request: HttpRequest) -> HttpResponse:
+    return HttpResponse('Account deactivation page.')
 
 
-def create_article(request: HttpRequest) -> HttpResponse:
-    topics = Topic.objects.all()
-    topics_to_ctx = []
-    for index, topic in enumerate(topics):
-        cur_topic = {'option_value': index + 1, 'topic': topic}
-        topics_to_ctx.append(cur_topic)
-    ctx = {
-        'topics_list': topics_to_ctx,
-        'topics': Topic.objects.all(),
-    }
-    return render(request, 'create_article.html', ctx)
+def register(request: HttpRequest) -> HttpResponse:
+    return render(request, 'register.html')
+
+
+def login(request: HttpRequest) -> HttpResponse:
+    return render(request, 'login.html')
+
+
+def logout(request: HttpRequest) -> HttpResponse:
+    return HttpResponse('Logout page.')
