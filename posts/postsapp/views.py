@@ -30,7 +30,7 @@ def profile(request: HttpRequest, username) -> HttpResponse:
 
 def set_password(request: HttpRequest) -> HttpResponse:
     if not request.user.is_authenticated:
-        url = reverse('login_user')
+        url = reverse('user:login_user')
         return HttpResponseRedirect(url)
     if request.method == "POST":
         form = SetNewPassword(request.POST, initial={'username': request.user.username})
@@ -50,7 +50,7 @@ def password_changed(request: HttpRequest) -> HttpResponse:
 
 def set_userdata(request: HttpRequest) -> HttpResponse:
     if not request.user.is_authenticated:
-        url = reverse('login_user')
+        url = reverse('user:login_user')
         return HttpResponseRedirect(url)
     user = request.user
     if request.method == "POST":
@@ -68,7 +68,7 @@ def set_userdata(request: HttpRequest) -> HttpResponse:
 
 def deactivate(request: HttpRequest) -> HttpResponse:
     if not request.user.is_authenticated:
-        url = reverse('login_user')
+        url = reverse('user:login_user')
         return HttpResponseRedirect(url)
     user = request.user
     if request.method == "POST":
