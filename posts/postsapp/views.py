@@ -10,15 +10,12 @@ UserModel = get_user_model()
 def profile(request: HttpRequest, username) -> HttpResponse:
     try:
         cur_user = UserModel.objects.get(username=username)
-        articles = Article.objects.filter(author=cur_user)
-        articles_on_preferred_topics = get_sorted_articles(cur_user.id)
-        sorted_topics = get_sorted_topics(cur_user)
 
         ctx = {
             'user': cur_user,
-            'users_articles': articles,
-            'recommendation': articles_on_preferred_topics,
-            'ordered_topics': sorted_topics,
+            'users_articles':  Article.objects.filter(author=cur_user),
+            'recommendation': get_sorted_articles(cur_user.id),
+            'ordered_topics': get_sorted_topics(cur_user),
         }
 
         return render(request, 'user_profile_page.html', ctx)
@@ -29,8 +26,7 @@ def profile(request: HttpRequest, username) -> HttpResponse:
 def set_password(request: HttpRequest, username) -> HttpResponse:
     try:
         user = UserModel.objects.get(username=username)
-        ctx = {'user': user}
-        return render(request, 'set_password.html', ctx)
+        return render(request, 'set_password.html', {'user': user})
     except UserModel.DoesNotExist:
         raise Http404('User with this password does not exist.')
 
@@ -38,8 +34,7 @@ def set_password(request: HttpRequest, username) -> HttpResponse:
 def set_userdata(request: HttpRequest, username) -> HttpResponse:
     try:
         user = UserModel.objects.get(username=username)
-        ctx = {'user': user}
-        return render(request, 'set_data.html', ctx)
+        return render(request, 'set_data.html', {'user': user})
     except UserModel.DoesNotExist:
         raise Http404('User with this password does not exist.')
 

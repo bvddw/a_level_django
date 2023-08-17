@@ -8,10 +8,7 @@ UserModel = get_user_model()
 
 
 def main_page(request: HttpRequest) -> HttpResponse:
-    ctx = {
-        'articles_to_disp': Article.objects.all().order_by('author').annotate(number_of_comments=Count('comment')),
-    }
-    return render(request, 'index.html', ctx)
+    return render(request, 'index.html')
 
 
 def about(request: HttpRequest) -> HttpResponse:

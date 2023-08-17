@@ -7,7 +7,6 @@ def article(request: HttpRequest, article_slug) -> HttpResponse:
     try:
         ctx = {
             'article': Article.objects.get(slug=article_slug),
-            'comments': Comment.objects.filter(article=Article.objects.get(slug=article_slug)),
         }
         return render(request, 'one_article.html', ctx)
     except Article.DoesNotExist:

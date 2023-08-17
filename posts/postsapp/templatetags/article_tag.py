@@ -12,7 +12,7 @@ def custom_article_tag():
 
 @register.inclusion_tag('list_articles.html')
 def show_articles():
-    articles = Article.objects.all().order_by('created_at').annotate(number_of_comments=Count('comment'))
+    articles = Article.objects.all().order_by('-created_at').annotate(number_of_comments=Count('comment'))
     context = {
         'articles': articles,
     }

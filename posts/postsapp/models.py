@@ -16,6 +16,9 @@ class Topic(models.Model):
     def __str__(self):
         return self.title
 
+    def get_articles(self):
+        return Article.objects.filter(topics=self)
+
 
 class UserTopic(models.Model):
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
@@ -35,7 +38,6 @@ class Article(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(f"{self.title[:36]} {timezone.now().strftime('%Y-%d-%m')}")
         super(Article, self).save(*args, **kwargs)
-
 
     def __str__(self):
         return self.title

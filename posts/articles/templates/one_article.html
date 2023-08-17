@@ -27,7 +27,7 @@
     {% if comments %}
     <h2 style="text-align: left; font-style: italic">Comments</h2>
     {% endif %}
-  {% for comment in comments %}
+  {% for comment in article.comment_set.all %}
     <div style="margin-bottom: 12px; text-align: left">
       <p><a style="color: black; font-weight: bold" href="{% url 'profile_page' username=comment.author %}">{{ comment.author }}:</a> <a style="color: rgba(0, 0, 0, 0.64)">({{ comment.created_at}})<a/></p>
       <p>{{ comment.message }}</p>
