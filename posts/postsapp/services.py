@@ -1,4 +1,4 @@
-from postsapp.models import Article, UserTopic
+from postsapp.models import Article, UserTopic, Topic
 from django.contrib.auth import get_user_model
 from django.db.models import Count, Q
 
@@ -22,5 +22,23 @@ def get_sorted_articles(user_id):
     articles_titles = Article.objects.all().annotate(number_of_topics=Count('topics', filter=Q(topics__title__in=preferred_topics)))
     # let's display only three first relevant topics for each user. Even if user has not preferred topics, we will show
     # just 3 different articles, for his/her attention.
-    articles_titles = articles_titles.order_by('number_of_topics').values_list('title', flat=True)[:3]
+    articles_titles = articles_titles.order_by('number_of_topics')[:3]
     return articles_titles
+
+
+def get_sorted_topics(user):
+    topics = Topic.objects.all()
+    high_priority = []
+    mid_priority = []
+    low_priority = []
+    for topic in topics:
+        if topic.id in UserTopic.objects.filter(user=user).values_list('topic', flat=True):
+            if UserTopic.objects.get(user=user, topic=topic).notify:
+                high_priority.append({'topic': topic, 'priority': 2})
+            else:
+                mid_priority.append({'topic': topic, 'priority': 1})
+        else:
+            low_priority.append({'topic': topic, 'priority': 0})
+    high_priority.extend(mid_priority)
+    high_priority.extend(low_priority)
+    return high_priority

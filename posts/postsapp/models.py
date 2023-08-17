@@ -1,6 +1,8 @@
+from django.utils import timezone
 from django.db import models
 from django.core.validators import MinLengthValidator
 from django.contrib.auth import get_user_model
+from django.template.defaultfilters import slugify
 
 # Create your models here.
 UserModel = get_user_model()
@@ -13,6 +15,9 @@ class Topic(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_articles(self):
+        return Article.objects.filter(topics=self)
 
 
 class UserTopic(models.Model):
@@ -28,6 +33,11 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     topics = models.ManyToManyField(Topic)
     author = models.ForeignKey(UserModel, on_delete=models.CASCADE)
+    slug = models.SlugField(unique=True, editable=False)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(f"{self.title[:36]} {timezone.now().strftime('%Y-%d-%m')}")
+        super(Article, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
