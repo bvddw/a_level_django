@@ -24,7 +24,7 @@ urlpatterns = [
     path('', views.main_page, name='main_page'),
     path('about/', views.about, name='about_page'),
     re_path(r'^archive\/(?P<year>\d{4})\/(?P<month>1[0-2]|0?[1-9])\/$', views.archive),
-    path('', include('postsapp.urls')),  # users urls
-    path('topic/', include('topics.urls')),  # topics urls
-    path('', include('articles.urls')),  # articles urls
+    path('', include(('postsapp.urls', 'postsapp'), namespace='user')),  # user urls
+    path('articles/', include(('articles.urls', 'articles'), namespace='articles')),  # articles urls
+    path('topics/', include(('topics.urls', 'topics'), namespace='topics')),  # topics urls
 ]
