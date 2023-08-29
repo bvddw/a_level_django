@@ -20,9 +20,8 @@ def get_sorted_articles(user_id):
     preferred_topics = UserTopic.objects.filter(user=user).values_list('topic__title', flat=True)
     # take only articles, that connected to preferred topics
     articles_titles = Article.objects.all().annotate(number_of_topics=Count('topics', filter=Q(topics__title__in=preferred_topics)))
-    # let's display only three first relevant topics for each user. Even if user has not preferred topics, we will show
-    # just 3 different articles, for his/her attention.
-    articles_titles = articles_titles.order_by('number_of_topics')[:3]
+    # let's display only three first relevant topics for each user. Even if user has not preferred topics
+    articles_titles = articles_titles.order_by('number_of_topics')
     return articles_titles
 
 

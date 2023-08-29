@@ -7,5 +7,5 @@
 {% load article_tag %}
 
 {% block content %}
-  {% show_articles %}
+  {% show_articles request.user %}
 {% endblock %}

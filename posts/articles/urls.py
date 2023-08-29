@@ -20,6 +20,7 @@ from . import views
 
 urlpatterns = [
     path('create/', views.create_article, name='create_article'),
+    path('no-access/', views.no_access, name='no_access'),
     path('<slug:article_slug>/', views.article, name='one_article'),
     path('<slug:article_slug>/update/', views.update_article, name='upd_article'),
     path('<slug:article_slug>/delete/', views.delete_article, name='del_article'),
